@@ -1,7 +1,7 @@
 from ocrapi import recognize_captcha
 import time,DrissionPage
 
-Api_proxy="localhost:8000/recognize"
+Api_proxy="http://localhost:8000/recognize"
 Api_key="bd215ccaebeaa5a26c1ed29414f34944"
 
 def ocr(image : bytes):
