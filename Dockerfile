@@ -5,7 +5,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     wget \
     ca-certificates \
-    gnupg \
     fonts-liberation \
     libasound2 \
     libatk-bridge2.0-0 \
@@ -42,9 +41,10 @@ RUN apt-get update && \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装 Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+# 使用现代方法安装 Chrome
+RUN mkdir -p /etc/apt/keyrings && \
+    wget -q -O /etc/apt/keyrings/google-chrome.gpg https://dl.google.com/linux/linux_signing_key.pub && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
@@ -56,7 +56,7 @@ COPY . .
 # 安装Python依赖
 RUN pip install --no-cache-dir requests DrissionPage
 
-# 创建启动脚本
+# 创建启动脚本（使用 sh 而不是 bash）
 RUN echo '#!/bin/sh\n\
 google-chrome --headless --disable-gpu --remote-debugging-port=9222 --no-sandbox > /dev/null 2>&1 &\n\
 sleep 5  # 确保浏览器完全启动\n\
