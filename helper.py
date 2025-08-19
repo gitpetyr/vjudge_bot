@@ -5,7 +5,9 @@ Api_proxy="http://svr.livedless.com:8000/recognize"
 Api_key="bd215ccaebeaa5a26c1ed29414f34944"
 
 def ocr(image : bytes):
-    return recognize_captcha(image,Api_proxy,Api_key)["result"]
+    res=recognize_captcha(image,Api_proxy,Api_key)
+    print(res)
+    return res["result"]
 
 co = DrissionPage.ChromiumOptions()
 co.set_local_port(9222)
@@ -26,7 +28,6 @@ while True:
         continue
     print("det:"+image_ele.link)
     ocr_res = ocr(image_ele.src(base64_to_bytes=True))
-    print(ocr_res)
     if ocr_res==None:
         continue
     if len(ocr_res)!=4:
