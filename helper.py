@@ -26,6 +26,7 @@ while True:
         continue
     print("det:"+image_ele.link)
     ocr_res = ocr(image_ele.src(base64_to_bytes=True))
+    print(ocr_res)
     if ocr_res==None:
         continue
     if len(ocr_res)!=4:
